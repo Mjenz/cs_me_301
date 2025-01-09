@@ -58,19 +58,30 @@ def Stop(signum, frame):
     signal.signal(signal.SIGINT, Stop)
 
 def reset_pos():
-    board.bus_servo_set_position(1, [[1, 500], [4, 500], [7, 500], [10, 500], [13, 500], [16, 500]])
-    board.bus_servo_set_position(1, [[2, 500], [5, 500], [8, 500], [11, 500], [14, 500], [17, 500]])
-    board.bus_servo_set_position(1, [[3, 300], [6, 300], [9, 300], [12, 700], [15, 700], [18, 700]])
+    board.bus_servo_set_position(0.5, [[1, 500], [4, 500], [7, 500], [10, 500], [13, 500], [16, 500]])
+    board.bus_servo_set_position(0.5, [[2, 500], [5, 500], [8, 500], [11, 500], [14, 500], [17, 500]])
+    board.bus_servo_set_position(0.5, [[3, 300], [6, 300], [9, 300], [12, 700], [15, 700], [18, 700]])
 
 if __name__ == '__main__':
     
-    reset_pos()
-    board.bus_servo_set_position(1, [[front_left_leg_elevation_1, 300], [middle_right_leg_elevation_1, 700], [back_left_leg_elevation_1, 300]])
-    time.sleep(1)
-    board.bus_servo_set_position(1, [[front_left_leg_azimuth, 300], [middle_right_leg_azimuth, 300], [back_left_leg_azimuth, 300]])
-    time.sleep(1)
-    board.bus_servo_set_position(1, [[front_left_leg_elevation_1, 500], [middle_right_leg_elevation_1, 500], [back_left_leg_elevation_1, 500]])
-    time.sleep(2)
+
+    for i in range (1, 5):
+        reset_pos()
+        time.sleep(1)
+        board.bus_servo_set_position(0.5, [[front_left_leg_elevation_1, 300], [middle_right_leg_elevation_1, 700], [back_left_leg_elevation_1, 300]])
+        time.sleep(.6)
+        board.bus_servo_set_position(0.5, [[front_left_leg_azimuth, 300], [middle_right_leg_azimuth, 300], [back_left_leg_azimuth, 300]])
+        time.sleep(.6)
+        board.bus_servo_set_position(0.5, [[front_left_leg_elevation_1, 500], [middle_right_leg_elevation_1, 500], [back_left_leg_elevation_1, 500]])
+        time.sleep(.6)
+
+        board.bus_servo_set_position(0.5, [[front_right_leg_elevation_1, 700], [middle_left_leg_elevation_1, 300], [back_right_leg_elevation_1, 700]])
+        time.sleep(.6)
+        board.bus_servo_set_position(0.5, [[front_right_leg_azimuth, 300], [middle_left_leg_azimuth, 300], [back_right_leg_azimuth, 300]])
+        time.sleep(.6)
+        board.bus_servo_set_position(0.5, [[front_right_leg_elevation_1, 500], [middle_left_leg_elevation_1, 500], [back_right_leg_elevation_1, 500]])
+        time.sleep(1)
+
     reset_pos()
 
     signal.signal(signal.SIGINT, Stop)
