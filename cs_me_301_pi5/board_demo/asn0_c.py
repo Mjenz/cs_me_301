@@ -5,6 +5,7 @@ import time
 import signal
 import threading
 import ros_robot_controller_sdk as rrc
+from smbus2 import SMBus, i2c_msg
 
 
 print('''
@@ -20,6 +21,39 @@ Tips:
       please try multiple times！
 ----------------------------------------------------------
 ''')
+
+class Sonar:
+    __units = {"mm":0, "cm":1}
+    __dist_reg = 0
+
+    def __init__(self):
+        self.i2c_addr = 0x77
+        self.i2c = 1
+        self.Pixels = [0,0]
+        self.RGBMode = 0
+
+    def __getattr(self, attr):
+        if attr in self.__units:
+            return self.__units[attr]
+        if attr == "Distance":
+            return self.getDistance()
+        else:
+            raise AttributeError('Unknow attribute : %s'%attr)
+        
+    def getDistance(self):
+        dist = 99999
+        try:
+            with SMBus(self.i2c) as bus:
+                msg = i2c_msg.write(self.i2c_addr, [0,])
+                bus.i2c_rdwr(msg)
+                read = i2c_msg.read(self.i2c_addr, 2)
+                bus.i2c_rdwr(read)
+                dist = int.from_bytes(bytes(list(read)), byteorder='little', signed=False)
+                if dist > 5000:
+                    dist = 5000
+        except BaseException as e:
+            print(e)
+        return dist
 
 back_left_leg_azimuth = 1
 back_left_leg_elevation_1 = 2
@@ -62,9 +96,8 @@ def reset_pos():
     board.bus_servo_set_position(0.5, [[2, 500], [5, 500], [8, 500], [11, 500], [14, 500], [17, 500]])
     board.bus_servo_set_position(0.5, [[3, 300], [6, 300], [9, 300], [12, 700], [15, 700], [18, 700]])
 
-if __name__ == '__main__':
+def turn_90():
     
-
     for i in range (1, 5):
         reset_pos()
         time.sleep(1)
@@ -83,6 +116,17 @@ if __name__ == '__main__':
         time.sleep(1)
 
     reset_pos()
+
+def read_sonar():
+    start_time = time.time()
+    end_time = start_time + 1
+
+    s = Sonar()
+    while time.time() < end_time:
+        print(s.getDistance())
+
+if __name__ == '__main__':
+    read_sonar()
 
     signal.signal(signal.SIGINT, Stop)
     exit()
