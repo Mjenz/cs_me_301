@@ -21,17 +21,31 @@ Tips:
 ----------------------------------------------------------
 ''')
 
-while True:
+back_left_leg_azimuth = 1
+back_left_leg_elevation_1 = 2
+back_left_leg_elevation_2 = 3
 
-    print('''Assignment 0 for Group c''')
-    time.sleep(1) 
-    
+middle_left_leg_azimuth = 4
+middle_left_leg_elevation_1 = 5
+middle_left_leg_elevation_2 = 6
 
+front_left_leg_azimuth = 7
+front_left_leg_elevation_1 = 8
+front_left_leg_elevation_2 = 9
 
-    
+front_right_leg_azimuth = 10
+front_right_leg_elevation_1 = 11
+front_right_leg_elevation_2 = 12
 
+middle_right_leg_azimuth = 13
+middle_right_leg_elevation_1 = 14
+middle_right_leg_elevation_2 = 15
 
-board = rrc.Board
+back_right_leg_azimuth = 16
+back_right_leg_elevation_1 = 17
+back_right_leg_elevation_2 = 18
+
+board = rrc.Board()
 start = True
 
 def Stop(signum, frame):
@@ -41,32 +55,26 @@ def Stop(signum, frame):
     print('what are you doing')
     
 
-signal.signal(signal.SIGINT, Stop)
+    signal.signal(signal.SIGINT, Stop)
+
+def reset_pos():
+    board.bus_servo_set_position(1, [[1, 500], [4, 500], [7, 500], [10, 500], [13, 500], [16, 500]])
+    board.bus_servo_set_position(1, [[2, 500], [5, 500], [8, 500], [11, 500], [14, 500], [17, 500]])
+    board.bus_servo_set_position(1, [[3, 300], [6, 300], [9, 300], [12, 700], [15, 700], [18, 700]])
 
 if __name__ == '__main__':
     
-    while True:
+    reset_pos()
+    board.bus_servo_set_position(1, [[front_left_leg_elevation_1, 300], [middle_right_leg_elevation_1, 700], [back_left_leg_elevation_1, 300]])
+    time.sleep(1)
+    board.bus_servo_set_position(1, [[front_left_leg_azimuth, 300], [middle_right_leg_azimuth, 300], [back_left_leg_azimuth, 300]])
+    time.sleep(1)
+    board.bus_servo_set_position(1, [[front_left_leg_elevation_1, 500], [middle_right_leg_elevation_1, 500], [back_left_leg_elevation_1, 500]])
+    time.sleep(2)
+    reset_pos()
 
-        for i in range(1, 8, 3):
-            try:
-                board.bus_servo_set_position(1, [[i+1, 500]])
-                board.bus_servo_set_position(1, [[i+10, 500]])            
-                time.sleep(1)
-                board.bus_servo_set_position(1, [[i, 500]])
-                board.bus_servo_set_position(1, [[i+9, 500]])
-                time.sleep(1)
-                board.bus_servo_set_position(1, [[i+1, -500]])
-                board.bus_servo_set_position(1, [[i+10, -500]]) 
+    signal.signal(signal.SIGINT, Stop)
+    exit()
+
                 
-                    
-                if not start:
-                    board.bus_servo_stop([1, 2])
-                    time.sleep(1)
-                    print('what')
-                    break
-            except KeyboardInterrupt:
-                break
-            
-    
-    
         
