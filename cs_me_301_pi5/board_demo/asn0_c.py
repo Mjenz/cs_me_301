@@ -7,6 +7,19 @@ import threading
 import ros_robot_controller_sdk as rrc
 from smbus2 import SMBus, i2c_msg
 from sensor import dot_matrix_sensor
+import argparse
+from multiprocessing import Process
+
+parser = argparse.ArgumentParser(
+    prog='asn0_c.py'
+)
+parser.add_argument('-b', '--behavior', nargs='+', type=str, help="Takes in valid behaviors to run and calls them with default values")
+parser.add_argument('-t', '--turn', nargs=2, type=float, default=[])
+parser.add_argument('-wwa', '--walk_with_avoidance', nargs=1, type=int, help="Walks for arg1 cycles, checking for obstacles after during each cycle")
+parser.add_argument('-w', '--walk', help="walks forward once")
+args = parser.parse_args()
+print(f"running following behaviors: {args}")
+
 
 
 print('''
@@ -161,6 +174,8 @@ Returns:
     None
 """
 def turn_90(offset=1, speed=1):
+    offset = int(offset)
+    print(offset)
     if offset != 1 or offset != -1:
         offset = 1
     offset = offset * 200
@@ -251,7 +266,7 @@ def display_message_stuck():
     tm = dot_matrix_sensor.TM1640(dio=7, clk=8)
     ## display message
     tm.display_buf = (
-        0x7C, 0x54, 0x5C,    # S (3 columns)
+        0x7C, 0x54, 0x5C, 0x00,    # S (3 columns)
         0x44, 0x7E,          # T (2 columns)
         0x7C, 0x40, 0x7C,    # U (3 columns)
         0x7C, 0x44, 0x28,    # C (3 columns)
@@ -278,6 +293,9 @@ Returns:
 def walk_with_object_avoidance(cycles=10):
     # for detecting if we're infinitly turning
     turn_counter = 0
+    reset_pos()
+    if cycles < 1 or cycles > 15:
+        cycles = 2
 
     # Executes the walk and obstacle detection cycle i times. Each cycle consists of checking the sonar average to detect if there's something in front of the pod.
     # walks if none, else turns. After walk, takes new sonar average and compares to old average. Turns if enough decrease is noticed, else loops 
@@ -308,9 +326,37 @@ def walk_with_object_avoidance(cycles=10):
         if difference > 200:
             turn_90()
             turn_counter += 1
-        
+
+    reset_pos()
+
+def execute_behaviors():
+    reset_pos()
+    print(args)
+    behavior_map ={
+    "turn_90": turn_90,
+    "walk": walk,
+    "walk_with_object_avoidance": walk_with_object_avoidance
+    }
+    try:
+        if args.behavior:
+            for b in args.behavior:
+                if b in behavior_map:
+                    behavior_map[b]()
+
+        if args.turn:
+            direction = int(args.turn[0])
+            print(direction)
+            turn_90(args.turn[0], args.turn[1])
+
+        if args.walk:
+            walk()
+    except Exception as e:
+        print(e)
+
 
 if __name__ == '__main__':
+
+    execute_behaviors()
 
     signal.signal(signal.SIGINT, Stop)
     exit()
