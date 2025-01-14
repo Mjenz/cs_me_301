@@ -96,6 +96,43 @@ def reset_pos():
     board.bus_servo_set_position(0.5, [[2, 500], [5, 500], [8, 500], [11, 500], [14, 500], [17, 500]])
     board.bus_servo_set_position(0.5, [[3, 300], [6, 300], [9, 300], [12, 700], [15, 700], [18, 700]])
 
+def walk():
+
+    # Elevation 1
+    # group 1: 2, 8, 14
+    # group 2: 5, 11, 17
+
+    # Azmith
+    # group 1: 1, 7, 13
+    # group 2: 4, 10, 16
+
+    # lift up elevation group 1
+    board.bus_servo_set_position(1, [[back_left_leg_elevation_1, 400],[front_left_leg_elevation_1, 400],[middle_right_leg_elevation_1, 600]])
+    time.sleep(1)
+    # azmith group 2 backward turn
+    board.bus_servo_set_position(1, [[middle_left_leg_azimuth, 600],[front_right_leg_azimuth, 400],[back_right_leg_azimuth, 400]])
+    time.sleep(1)
+    # azmith group 1 forward turn (in air)
+    board.bus_servo_set_position(1, [[back_left_leg_azimuth,400],[front_left_leg_azimuth, 400],[middle_right_leg_azimuth, 600]])
+    time.sleep(1)
+    # put down elevation group 1
+    board.bus_servo_set_position(1, [[back_left_leg_elevation_1, 500],[front_left_leg_elevation_1, 500],[middle_right_leg_elevation_1, 500]])
+    time.sleep(1)
+
+
+    # lift up elevation group 2
+    board.bus_servo_set_position(1, [[middle_left_leg_elevation_1, 400],[front_right_leg_elevation_1, 600],[back_right_leg_elevation_1, 600]])
+    time.sleep(1)
+    # azmith group 1 backward turn
+    board.bus_servo_set_position(1, [[back_left_leg_azimuth, 600],[front_left_leg_azimuth, 600],[middle_right_leg_azimuth, 400]])
+    time.sleep(1)
+    # azmith group 2 forward turn (in air)
+    board.bus_servo_set_position(1, [[middle_left_leg_azimuth, 400],[front_right_leg_azimuth, 600],[back_right_leg_azimuth, 600]])
+    time.sleep(1) 
+    # put down elevation group 2
+    board.bus_servo_set_position(1, [[middle_left_leg_elevation_1, 500],[front_right_leg_elevation_1, 500],[back_right_leg_elevation_1, 500]])
+    time.sleep(1)
+
 def turn_90():
     
     for i in range (1, 5):
