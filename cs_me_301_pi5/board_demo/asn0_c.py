@@ -123,8 +123,7 @@ def reset_pos(speed=1):
     board.bus_servo_set_position(speed, [[1, 500], [4, 500], [7, 500], [10, 500], [13, 500], [16, 500]])
     board.bus_servo_set_position(speed, [[2, 500], [5, 500], [8, 500], [11, 500], [14, 500], [17, 500]])
     board.bus_servo_set_position(speed, [[3, 300], [6, 300], [9, 300], [12, 700], [15, 700], [18, 700]])
-
-def walk():
+def walk(direction=1, speed=1):
 
     # Elevation 1
     # group 1: 2, 8, 14
@@ -133,33 +132,61 @@ def walk():
     # Azmith
     # group 1: 1, 7, 13
     # group 2: 4, 10, 16
+    if direction is 1:
+        # lift up elevation group 1
+        board.bus_servo_set_position(speed, [[back_left_leg_elevation_1, 400],[front_left_leg_elevation_1, 400],[middle_right_leg_elevation_1, 600]])
+        # time.sleep(1)
+        # azmith group 2 backward turn
+        board.bus_servo_set_position(speed, [[middle_left_leg_azimuth, 600],[front_right_leg_azimuth, 400],[back_right_leg_azimuth, 400]])
+        # time.sleep(1)
+        # azmith group 1 forward turn (in air)
+        board.bus_servo_set_position(speed, [[back_left_leg_azimuth,400],[front_left_leg_azimuth, 400],[middle_right_leg_azimuth, 600]])
+        # time.sleep(1)
+        # put down elevation group 1
+        board.bus_servo_set_position(speed, [[back_left_leg_elevation_1, 500],[front_left_leg_elevation_1, 500],[middle_right_leg_elevation_1, 500]])
+        time.sleep(1)
 
-    # lift up elevation group 1
-    board.bus_servo_set_position(1, [[back_left_leg_elevation_1, 400],[front_left_leg_elevation_1, 400],[middle_right_leg_elevation_1, 600]])
-    time.sleep(1)
-    # azmith group 2 backward turn
-    board.bus_servo_set_position(1, [[middle_left_leg_azimuth, 600],[front_right_leg_azimuth, 400],[back_right_leg_azimuth, 400]])
-    time.sleep(1)
-    # azmith group 1 forward turn (in air)
-    board.bus_servo_set_position(1, [[back_left_leg_azimuth,400],[front_left_leg_azimuth, 400],[middle_right_leg_azimuth, 600]])
-    time.sleep(1)
-    # put down elevation group 1
-    board.bus_servo_set_position(1, [[back_left_leg_elevation_1, 500],[front_left_leg_elevation_1, 500],[middle_right_leg_elevation_1, 500]])
-    time.sleep(1)
+
+        # lift up elevation group 2
+        board.bus_servo_set_position(speed, [[middle_left_leg_elevation_1, 400],[front_right_leg_elevation_1, 600],[back_right_leg_elevation_1, 600]])
+        # time.sleep(1)
+        # azmith group 1 backward turn
+        board.bus_servo_set_position(speed, [[back_left_leg_azimuth, 600],[front_left_leg_azimuth, 600],[middle_right_leg_azimuth, 400]])
+        # time.sleep(1)
+        # azmith group 2 forward turn (in air)
+        board.bus_servo_set_position(speed, [[middle_left_leg_azimuth, 400],[front_right_leg_azimuth, 600],[back_right_leg_azimuth, 600]])
+        # time.sleep(1) 
+        # put down elevation group 2
+        board.bus_servo_set_position(speed, [[middle_left_leg_elevation_1, 500],[front_right_leg_elevation_1, 500],[back_right_leg_elevation_1, 500]])
+        time.sleep(1)
+    else:
+         # lift up elevation group 1
+        board.bus_servo_set_position(speed, [[back_left_leg_elevation_1, 400],[front_left_leg_elevation_1, 400],[middle_right_leg_elevation_1, 600]])
+        # time.sleep(1)
+        # azmith group 2 forward turn
+        board.bus_servo_set_position(speed, [[middle_left_leg_azimuth, 400],[front_right_leg_azimuth, 600],[back_right_leg_azimuth, 600]])
+        # time.sleep(1)
+        # azmith group 1 back turn (in air)
+        board.bus_servo_set_position(speed, [[back_left_leg_azimuth,600],[front_left_leg_azimuth, 600],[middle_right_leg_azimuth, 400]])
+        # time.sleep(1)
+        # put down elevation group 1
+        board.bus_servo_set_position(speed, [[back_left_leg_elevation_1, 500],[front_left_leg_elevation_1, 500],[middle_right_leg_elevation_1, 500]])
+        time.sleep(1)
 
 
-    # lift up elevation group 2
-    board.bus_servo_set_position(1, [[middle_left_leg_elevation_1, 400],[front_right_leg_elevation_1, 600],[back_right_leg_elevation_1, 600]])
-    time.sleep(1)
-    # azmith group 1 backward turn
-    board.bus_servo_set_position(1, [[back_left_leg_azimuth, 600],[front_left_leg_azimuth, 600],[middle_right_leg_azimuth, 400]])
-    time.sleep(1)
-    # azmith group 2 forward turn (in air)
-    board.bus_servo_set_position(1, [[middle_left_leg_azimuth, 400],[front_right_leg_azimuth, 600],[back_right_leg_azimuth, 600]])
-    time.sleep(1) 
-    # put down elevation group 2
-    board.bus_servo_set_position(1, [[middle_left_leg_elevation_1, 500],[front_right_leg_elevation_1, 500],[back_right_leg_elevation_1, 500]])
-    time.sleep(1)
+        # lift up elevation group 2
+        board.bus_servo_set_position(speed, [[middle_left_leg_elevation_1, 400],[front_right_leg_elevation_1, 600],[back_right_leg_elevation_1, 600]])
+        # time.sleep(1)
+        # azmith group 1 forward turn
+        board.bus_servo_set_position(speed, [[back_left_leg_azimuth, 400],[front_left_leg_azimuth, 400],[middle_right_leg_azimuth, 600]])
+        # time.sleep(1)
+        # azmith group 2 forward turn (in air)
+        board.bus_servo_set_position(speed, [[middle_left_leg_azimuth, 600],[front_right_leg_azimuth, 400],[back_right_leg_azimuth, 400]])
+        # time.sleep(1) 
+        # put down elevation group 2
+        board.bus_servo_set_position(speed, [[middle_left_leg_elevation_1, 500],[front_right_leg_elevation_1, 500],[back_right_leg_elevation_1, 500]])
+        time.sleep(1)
+
 
 """
 Turns the robot 90 degrees
@@ -175,10 +202,13 @@ Returns:
 """
 def turn_90(offset=1, speed=1):
     offset = int(offset)
-    print(offset)
-    if offset != 1 or offset != -1:
-        offset = 1
+    
+    if offset != 1 :
+        if offset != -1:
+            print("fixing")
+            offset = 1
     offset = offset * 200
+    print(offset)
     # Make sure we're not moving too fast or too slow
     if not (0.2 <= speed <= 3):
         speed = 3
@@ -345,14 +375,46 @@ def execute_behaviors():
 
         if args.turn:
             direction = int(args.turn[0])
-            print(direction)
             turn_90(args.turn[0], args.turn[1])
 
         if args.walk:
             walk()
+
+        if args.walk_with_avoidance:
+            walk_with_object_avoidance(args.walk_with_avoidance[0])
     except Exception as e:
         print(e)
 
+def keep_distance(setpoint = 300):
+    s = Sonar()
+    while(True):
+        distance = []
+        end_time = time.time()+1
+        while time.time() < end_time:
+            distance.append(s.getDistance())
+            print(s.getDistance())
+        avg = np.average(distance)
+
+        if avg < setpoint:
+            number_of_steps = round((setpoint-avg)/100)+1 # Since each step is roughly 100mm forward, take that many steps forward
+            speed = 2/number_of_steps
+            if speed < .25:
+                speed = .25
+           
+            print(f"avg ({avg})forward at speed {speed} for {number_of_steps} steps")
+            walk(-1,speed)
+            # time.sleep(5)
+        if avg > setpoint:
+            number_of_steps = round((avg-setpoint)/100)+1
+            speed = 2/number_of_steps
+            if speed < .25:
+                speed = .25
+            print(f"avg ({avg})forward at speed {speed} for {number_of_steps} steps")
+            walk(1,speed)
+            # time.sleep(5)
+
+        else:
+            continue
 
 if __name__ == '__main__':
 
