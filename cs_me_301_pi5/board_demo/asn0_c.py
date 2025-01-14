@@ -134,7 +134,8 @@ def walk():
     time.sleep(1)
 
 def turn_90():
-    
+
+    # we need a function to turn right AND left in a different file I think
     for i in range (1, 5):
         reset_pos()
         time.sleep(1)
